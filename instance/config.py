@@ -10,6 +10,7 @@ class Config(object):
     DEBUG = False
     CSRF_ENABLED = True
     SECRET_KEY = os.getenv('SECRET_KEY')
+    DATABASE_URL = os.getenv("DATABASE_URL")
 
 
 class DevelopmentConfig(Config):
@@ -17,10 +18,12 @@ class DevelopmentConfig(Config):
     DEBUG = True
 
 
+
 class TestingConfig(Config):
     """Configurations for Testing, with a separate test database."""
     TESTING = True
     DEBUG = True
+    DATABASE_URL = os.getenv("TEST_DATABASE_URL")
 
 
 class StagingConfig(Config):

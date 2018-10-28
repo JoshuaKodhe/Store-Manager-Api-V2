@@ -4,7 +4,7 @@ import re
 class InputValidator:
     @staticmethod
     def valid_string(user_input):
-        if isinstance(user_input, str):
+        if isinstance(user_input.strip(), str):
             return user_input
         return False
 

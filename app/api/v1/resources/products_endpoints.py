@@ -60,7 +60,7 @@ class ProductEndpoint(Resource):
                 single_product = Product.update_product(self, name, description, category, quantity, unit_price)
                 return {"product": single_product}, 200
             return {"Ensure that all fields are correct"}, 204
-        return {"message": "The product of {productId} does not exist"}, 404
+        return {"message": f"The product of {productId} does not exist"}, 404
 
 
 class ProductListEndpoint(Resource):

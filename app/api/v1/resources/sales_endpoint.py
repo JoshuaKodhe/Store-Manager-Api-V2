@@ -59,6 +59,5 @@ class SalesRecordsListEndpoint(Resource):
     @jwt_required
     def get(self):
         sale_records = SaleRecordModel.retrieve_records(self)
-        if sale_records:
-            return {"sale_records": sale_records,
-                    "message": "Request succeful"}, 200
+        return {"sale_records": sale_records,
+                "message": "Request succefull"}, 200

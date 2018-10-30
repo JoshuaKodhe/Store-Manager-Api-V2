@@ -26,8 +26,7 @@ class ProductEndpoint(Resource):
         #     return{"message": f"Product {name} exists"}, 400
 
         if (name) and description and category and(quantity)and(unit_price):
-            new_product = Product(name, description, quantity, unit_price, category)
-            added_product = new_product.save()
-            return {"product": added_product,
+            new_product = Product(name, description, quantity, unit_price, category).save()
+            return {"product": new_product,
                     "message": "Successfully added"}, 201
         return {"message": "Ensure all the fields are correctly entered"}, 400

@@ -1,16 +1,18 @@
 import unittest
 from flask import json
 from app import create_app
-from app.api.v2.models.db_models import DB
+from app.db_setup import DB
+
+product_url = "/api/v2/products"
 
 
 class TestProducts(unittest.TestCase):
     def setUp(self):
-        self.app = create_app('testing')
+        self.app = create_app(config_name='testing')
+        self.db = DB("testing")
+        self.db.create_tables()
         self.app_context = self.app.app_context()
         self.app_context.push()
-        self.db = DB()
-        self.db.create_tables()
         self.client = self.app.test_client()
 
     def tearDown(self):
@@ -27,7 +29,7 @@ class TestProducts(unittest.TestCase):
                               "quantity": 15,
                               "description": "great for the back, must have"})
 
-        resp = self.client.post("/api/v2/products",
+        resp = self.client.post(product_url,
                                 data=product,
                                 content_type='application/json')
         response = json.loads(resp.data)
@@ -42,7 +44,7 @@ class TestProducts(unittest.TestCase):
                                       "quantity": 15,
                                       "description": "great for the back, must have"})
 
-        resp = self.client.post("/api/v2/products",
+        resp = self.client.post(product_url,
                                 data=invalid_product,
                                 content_type='application/json')
         data = json.loads(resp.data.decode())
@@ -52,13 +54,13 @@ class TestProducts(unittest.TestCase):
 
     def test_post_product_empty_price(self):
         '''Tests for no category'''
-        invalid_product = json.dumps({"name": "Chair",
+        invalid_product = json.dumps({"name": "chair",
                                       "category": " ",
                                       "price": 200,
                                       "quantity": 15,
                                       "description": "great for the back, must have"})
 
-        resp = self.client.post("/api/v2/products",
+        resp = self.client.post(product_url,
                                 data=invalid_product,
                                 content_type='application/json')
         data = json.loads(resp.data.decode())
@@ -68,14 +70,14 @@ class TestProducts(unittest.TestCase):
 
     def test_post_product_extra_field(self):
         '''Tests for no price'''
-        invalid_product = json.dumps({"name": "Chair",
+        invalid_product = json.dumps({"name": "chair",
                                       "category": "furniture",
                                       "another": "another_one",
                                       "price": 200,
                                       "quantity": 15,
                                       "description": "great for the back, must have"})
 
-        resp = self.client.post("/api/v2/products",
+        resp = self.client.post(product_url,
                                 data=invalid_product,
                                 content_type='application/json')
         data = json.loads(resp.data.decode())

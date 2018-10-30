@@ -1,4 +1,4 @@
-from app.api.v2.utils.db_connection import init_db
+from app.v2.utils.db_connection import init_db
 
 
 class Product:

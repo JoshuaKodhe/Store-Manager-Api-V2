@@ -2,7 +2,7 @@ from flask_restful import Resource
 from flask import request, json
 from flask_jwt_extended import jwt_required
 
-from app.api.v2.models.products_model import Product
+from app.v2.models.products_model import Product
 from app.validators.input_validators import InputValidator
 
 

@@ -3,12 +3,13 @@ from datetime import datetime
 from passlib.hash import pbkdf2_sha256 as sha256
 
 
-from app.api.v2.utils.db_connection import init_db
+from app.v2.utils.db_connection import init_db
 
 
 class User:
     """User class defining methods related to the class"""
     def __init__(self, email, password):
+        # add username
         self.email = email
         self.password = password
         self.registered_on = datetime.now()

@@ -3,7 +3,7 @@ from flask import Flask
 from flask_jwt_extended import JWTManager
 
 from instance.config import APP_CONFIG
-from app.db_setup import DB
+from app.v2.models.db_setup import DB
 
 JWT = JWTManager()
 
@@ -16,10 +16,7 @@ def create_app(config_name):
     db = DB(config_name)
     db.create_tables()
 
-    from app.api.v1 import VERSION_1 as v1
-    app.register_blueprint(v1)
-
-    from app.api.v2 import VERSION_2 as v2
+    from app.v2 import VERSION_2 as v2
     app.register_blueprint(v2)
 
     JWT.init_app(app)

@@ -1,26 +1,10 @@
 import unittest
 from flask import json
 from app import create_app
-from app.db_setup import DB
-
-product_url = "/api/v2/products"
+from .base_test import BaseTest, base_url
 
 
-class TestProducts(unittest.TestCase):
-    def setUp(self):
-        self.app = create_app(config_name='testing')
-        self.db = DB("testing")
-        self.db.create_tables()
-        self.app_context = self.app.app_context()
-        self.app_context.push()
-        self.client = self.app.test_client()
-
-    def tearDown(self):
-        '''Method to clear all tables
-        before another test is undertaken'''
-        self.db.destroy_tables()
-        self.app_context.pop()
-
+class TestProducts(BaseTest):
     def test_for_successful_product_registration(self):
         '''Tests for a successful product Addition'''
         product = json.dumps({"name": "chair",
@@ -29,7 +13,7 @@ class TestProducts(unittest.TestCase):
                               "quantity": 15,
                               "description": "great for the back, must have"})
 
-        resp = self.client.post(product_url,
+        resp = self.client.post(base_url+"/products",
                                 data=product,
                                 content_type='application/json')
         response = json.loads(resp.data)
@@ -44,7 +28,7 @@ class TestProducts(unittest.TestCase):
                                       "quantity": 15,
                                       "description": "great for the back, must have"})
 
-        resp = self.client.post(product_url,
+        resp = self.client.post(base_url+"/products",
                                 data=invalid_product,
                                 content_type='application/json')
         data = json.loads(resp.data.decode())
@@ -60,7 +44,7 @@ class TestProducts(unittest.TestCase):
                                       "quantity": 15,
                                       "description": "great for the back, must have"})
 
-        resp = self.client.post(product_url,
+        resp = self.client.post(base_url+"/products",
                                 data=invalid_product,
                                 content_type='application/json')
         data = json.loads(resp.data.decode())
@@ -77,7 +61,7 @@ class TestProducts(unittest.TestCase):
                                       "quantity": 15,
                                       "description": "great for the back, must have"})
 
-        resp = self.client.post(product_url,
+        resp = self.client.post(base_url+"/products",
                                 data=invalid_product,
                                 content_type='application/json')
         data = json.loads(resp.data.decode())

@@ -4,7 +4,7 @@ from flask_restful import Resource
 from flask import request
 
 
-from app.api.v2.models.user import User
+from app.v2.models.user import User
 from app.validators.input_validators import InputValidator
 
 

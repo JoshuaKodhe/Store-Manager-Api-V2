@@ -3,7 +3,7 @@ from datetime import datetime
 from passlib.hash import pbkdf2_sha256 as sha256
 
 
-from app.v2.utils.db_connection import init_db
+from app.utils.db_connection import init_db
 
 
 class User:
@@ -34,18 +34,17 @@ class User:
 
     def fetch_single_user(self, email):
         """Return a single user by email"""
-        cursor = self.db.cursor()
-        cursor.execute("SELECT role, password, registered_on FROM users WHERE email = %s;", (email,))
+        cursor = init_db().cursor()
+        cursor.execute("SELECT * FROM users WHERE email = %s;", (email,))
         user = cursor.fetchone()
         cursor.close()
         return user
 
     @staticmethod
     def check_if_user_exists(email):
-        database = init_db()
-        curr = database.cursor()
-        curr.execute("SELECT * FROM users WHERE email = %s;", (email,))
-        result = curr.fetchone()
+        cursor = init_db().cursor()
+        cursor.execute("SELECT * FROM users WHERE email = %s;", (email,))
+        result = cursor.fetchone()
         if result:
             return True
         return False

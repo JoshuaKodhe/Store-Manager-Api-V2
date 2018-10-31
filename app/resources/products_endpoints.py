@@ -2,11 +2,12 @@ from flask_restful import Resource
 from flask import request, json
 from flask_jwt_extended import jwt_required
 
-from app.v2.models.products_model import Product
+from app.models.products_model import Product
 from app.validators.input_validators import InputValidator
 
 
 class ProductEndpoint(Resource):
+    @jwt_required
     def post(self):
         data = request.get_json()
 

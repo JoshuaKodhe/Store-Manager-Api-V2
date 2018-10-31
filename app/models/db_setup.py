@@ -16,8 +16,11 @@ class DB:
                   CREATE TABLE IF NOT EXISTS users(
                   user_id serial PRIMARY KEY,
                   email varchar(90) UNIQUE NOT NULL,
+                  username varchar(50) NOT NULL,
                   password varchar(120) NOT NULL,
-                  registered_on varchar(100) NOT NULL)
+                  role varchar(40) NOT NULL,
+                  registered_on varchar(100) NOT NULL
+                  )
                   """,
 
                   """
@@ -39,7 +42,7 @@ class DB:
 
     def destroy_tables(self):
         """Used to remove tables from database"""
-        sql = [" DROP TABLE IF EXISTS products CASCADE",
+        sql = [" DROP TABLE IF EXISTS products",
                " DROP TABLE IF EXISTS users CASCADE"
                ]
         for string in sql:

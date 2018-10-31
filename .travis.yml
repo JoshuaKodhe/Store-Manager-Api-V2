@@ -5,8 +5,9 @@ install:
   pip install -r requirements.txt
 env:
     SECRET_KEY="\xa5%t\x|"
+    DATABASE_TEST_URL='postgresql://joshua_kodhe:12345@localhost:5432/test_store_manager'
 before_script:
- - psql -c ‘create database weconnect_test;’ -U postgres
+ - psql -c ‘create database test_store_manager;’ -U postgres
 script:
   pytest --cov=app
 after_success:

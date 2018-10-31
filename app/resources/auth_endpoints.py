@@ -16,13 +16,13 @@ class UserRegistrationEndpoint(Resource):
         email = InputValidator.valid_email(data['email'].strip())
         username = data['username'].strip()
         password = data['password'].strip()
+        role = data['role'].strip()
 
-        payload = ['email', 'username', 'password']
+        payload = ['email', 'username', 'password', 'role']
 
         for item in data.keys():
             if item not in payload:
                 return {"message": f"The field {item} is not a valid field"}, 400
-
 
         if not email:
             return{"message": "Please enter a valid email"}, 400
@@ -30,11 +30,14 @@ class UserRegistrationEndpoint(Resource):
             return {"message": "Please enter a username"}, 400
         elif not password:
             return {"message": "please enter password"}, 400
+        elif not role:
+            return {"message": "please enter role"}, 400
         else:
             if not User.check_if_user_exists(email):
                 new_user = User(email=data['email'],
-                                password=User.generate_hash(data['password'])
-                                )
+                                username=data['username'],
+                                password=User.generate_hash(data['password']),
+                                role=data["role"])
                 new_user.save_user()
                 return {"message": f'User {data["email"]} was created'}, 201
             return {"message": f"User {email} already exists"}, 400
@@ -58,9 +61,9 @@ class UserLogin(Resource):
             if User.fetch_single_user(self, email):
                 current_user = User.fetch_single_user(self, email)
                 if User.verify_hash(password,
-                                    current_user[2]):
+                                    current_user[3]):
                     access_token = create_access_token(identity=email,
-                                                       expires_delta=datetime.timedelta(hours=1))
+                                                       expires_delta=datetime.timedelta(hours=24))
                     return{'message': f'Logged in as {current_user[1]}',
                            'access_token': access_token,
                            }, 200

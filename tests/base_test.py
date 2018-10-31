@@ -21,20 +21,24 @@ class BaseTest(unittest.TestCase):
         # Auth variables
 
         self.proper_reg = json.dumps({"email": "testuser@gmail.com",
+                                      "username": "testU",
                                       "password": "asdfg",
-                                      "username": "testU"
+                                      "role": "admin"
                                       })
         self.blank_email_reg = json.dumps({"email": " ",
+                                           "username": "testU",
                                            "password": "asdfg",
-                                           "username": "testU"
+                                           "role": "admin"
                                            })
         self.empty_pass_reg = json.dumps({"email": "test@gmail.com",
+                                          "username": "testU",
                                           "password": " ",
-                                          "username": "testU"
+                                          "role": "admin"
                                           })
         self.extra_field = json.dumps({"email": "testuser@gmail.com",
-                                       "password": "asdfg",
                                        "username": "testU",
+                                       "password": "asdfg",
+                                       "role": "admin",
                                        "age": 34,
                                        })
 

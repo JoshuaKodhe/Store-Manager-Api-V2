@@ -8,25 +8,29 @@ from app.utils.db_connection import init_db
 
 class User:
     """User class defining methods related to the class"""
-    def __init__(self, email, password):
+    def __init__(self, email, username, password, role='attendant'):
         # add username
         self.email = email
+        self.username = username
         self.password = password
+        self.role = role
         self.registered_on = datetime.now()
         self.db = init_db()
 
     def save_user(self):
         """ save a new user """
         user = dict(email=self.email,
+                    username=self.username,
                     password=self.password,
+                    role=self.role,
                     registered_on=self.registered_on)
 
         cursor = self.db.cursor()
 
         cursor.execute(
-            "INSERT INTO users (email,password,registered_on) \
-               VALUES(%s,%s,%s)",
-            (self.email, self.password, self.registered_on),)
+            "INSERT INTO users (email,username,password,role,registered_on) \
+               VALUES(%s,%s,%s,%s,%s)",
+            (self.email, self.username, self.password, self.role, self.registered_on),)
 
         self.db.commit()
         self.db.close()
@@ -39,6 +43,8 @@ class User:
         user = cursor.fetchone()
         cursor.close()
         return user
+
+    
 
     @staticmethod
     def check_if_user_exists(email):

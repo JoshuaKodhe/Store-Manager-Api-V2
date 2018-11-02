@@ -27,17 +27,15 @@ product_schema = {
         "quantity": {type: "integer"},
         "price": {type: "integer"}
 
-    }
+    },
+    "required": ["name", "description", "category", "quantity","price"]
 }
 
 sale_schema = {
     "type": "object",
     "properties": {
         "name": {type: "string"},
-        "description": {type: "sring"},
-        "category": {type: "string"},
         "quantity": {type: "integer"},
-        "price": {type: "integer"}
-
-    }
+    },
+    "required": ["name", "quantity"]
 }

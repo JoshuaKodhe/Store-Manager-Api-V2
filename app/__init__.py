@@ -45,7 +45,7 @@ def create_app(config_name):
     api.add_resource(ProductsEndpoint, '/products')
     api.add_resource(ProductEndpoint, '/products', '/products/<int:prod_id>')
     api.add_resource(SalesRecordsEnpoint, '/sales')
-    api.add_resource(SalesRecordEnpoint, '/sales')
+    api.add_resource(SalesRecordEnpoint, '/sales', '/sales/<int:sale_id>')
     api.add_resource(UserRegistrationEndpoint, '/auth/register')
     api.add_resource(UserLogin, '/auth/login')
     api.add_resource(UserLogout, '/auth/logout')

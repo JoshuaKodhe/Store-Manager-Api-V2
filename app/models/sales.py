@@ -43,15 +43,15 @@ class Sales:
             return sales_list
 
     @classmethod
-    def retrieve_product_by_id(cls, sales_id):
+    def retrieve_sales_by_id(cls, sale_id):
         """Method to fetch a single product by it's ID"""
         with connect() as connection:
             with connection.cursor() as cursor:
-                cursor.execute("""SELECT * FROM sales WHERE prod_id=%s;""",
-                               (sales_id,))
-                product = cursor.fetchone()
-
-            if product:
-                return dict(name=product[1], category=product[2],
-                            price=product[3], quantity=product[4],
-                            description=product[5])
+                cursor.execute("""SELECT * FROM sales WHERE sale_id=%s""",
+                               (sale_id,))
+                sale = cursor.fetchone()
+                print(sale)
+            if sale:
+                return dict(sale_id=sale[0], sale_attendant=sale[1],
+                            product=sale[2],
+                            quantity=sale[3], price=sale[4])

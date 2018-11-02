@@ -18,9 +18,9 @@ class SalesRecordEnpoint(Resource):
 
         sale_attendant = get_jwt_identity()['email']
 
-        name = InputValidator.valid_string(data['product_name'].strip())
+        name = InputValidator.valid_string(data['name'].strip())
         quantity_to_sell = InputValidator.valid_number(data['quantity'])
-        payload = ['product_name', 'quantity']
+        payload = ['name', 'quantity']
 
         for item in data.keys():
             if item not in payload:
@@ -47,6 +47,15 @@ class SalesRecordEnpoint(Resource):
                         "message": f"The quantity of {product_on_sale['name']} has been updated new quantity is {new_quantity}"}, 201
             return {"message": f"The quantity you entered exceeds stoked quantity"}, 400
         return {"message": f"product {name} does not exist"}, 404
+
+    def get(self, sale_id):
+        """Retrieve a single product"""
+        sales = Sales.retrieve_sales_by_id(sale_id)
+        print(sales)
+        if sales:
+            return {"product": sales,
+                    "message": "Retrieved successfully"}, 200
+        return {"message": f"Sale of ID {sale_id} does not exist"}, 404
 
 
 class SalesRecordsEnpoint(Resource):

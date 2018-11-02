@@ -9,6 +9,7 @@ install:
 services:
   - postgresql
 before_script:
+  - export SECRET_KEY="\xa5%t"
   - export APP_SETTINGS=testing
   - psql -c "CREATE USER store_owner WITH PASSWORD '12345';"
   - psql -c 'CREATE DATABASE test_store_manager owner store_owner;'

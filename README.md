@@ -12,6 +12,14 @@ Store Manager is a web application that helps store owners manage sales and prod
 3. Admin/store attendant can get a specific product
 4. Store attendant can add a sale order
 5. Admin can get all sale records
+### Badges
+
+[![Build Status](https://travis-ci.org/JoshuaKodhe/Store-Manager-Api-V2.svg?branch=ft-products-sales-161499526)](https://travis-ci.org/JoshuaKodhe/Store-Manager-Api-V2)
+
+[![Maintainability](https://api.codeclimate.com/v1/badges/1244b02159ef166cb31d/maintainability)](https://codeclimate.com/github/JoshuaKodhe/Store-Manager-Api-V2/maintainability)
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/06667185f01946854464)
+
 
 ### Prerequisites
 

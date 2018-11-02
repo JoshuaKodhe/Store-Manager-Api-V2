@@ -1,14 +1,24 @@
 language: python
 python:
-  "3.6"
+ - "3.6"  
+cache: pip
 install:
-  pip install -r requirements.txt
-env:
-    DATABASE_TEST_URL='postgresql://joshua_kodhe:12345@localhost:5432/test_store_manager'
+ - pip install -r requirements.txt
+ - pip install coveralls
+ - pip install codeclimate-test-reporter
+services:
+  - postgresql
 before_script:
-  psql -c "CREATE USER joshua_kodhe WITH PASSWORD '12345';"
-  psql -c "CREATE DATABASE test_store_manager OWNER joshua_kodhe;"
+  - psql -c "CREATE USER store_owner WITH PASSWORD '12345';"
+  - psql -c 'CREATE DATABASE test_store_manager owner store_owner;'
+  - psql -c 'CREATE DATABASE store_manager owner store_owner;'
+
+env:
+  - DATABASE_TEST_URI='postgresql://store_owner:password12345@localhost:5432/store_manager'
 script:
-  pytest --cov=app
+ - pytest --cov-report term-missing --cov=app
+ - coveralls
+
 after_success:
-  coveralls
+ - coveralls
+ - codeclimate-test-reporter

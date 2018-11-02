@@ -3,13 +3,16 @@ import datetime
 from flask_restful import Resource
 from flask import request
 from flask_jwt_extended import create_access_token, get_raw_jwt, jwt_required
+from flask_expects_json import expects_json
 
 from app.models.user import User
 from app.validators.input_validators import InputValidator
+from app.utils.schema import register_schema, login_schema
 
 
 class UserRegistrationEndpoint(Resource):
     """Endpoint for user to register"""
+    @expects_json(register_schema)
     def post(self):
         data = request.get_json()
 
@@ -46,6 +49,7 @@ class UserRegistrationEndpoint(Resource):
 
 
 class UserLogin(Resource):
+    @expects_json(login_schema)
     def post(self):
         data = request.get_json()
         email = InputValidator.valid_email(data['email'].strip())
@@ -58,13 +62,16 @@ class UserLogin(Resource):
                 return {"message": f"The field {item} is not a valid field"}, 400
 
         if email and password:
-            if User.fetch_single_user(self, email):
-                current_user = User.fetch_single_user(self, email)
+            if User.check_if_user_exists(email):
+                current_user = User.fetch_single_user(email)
+                print(current_user)
                 if User.verify_hash(password,
-                                    current_user[3]):
-                    access_token = create_access_token(identity=email,
-                                                       expires_delta=datetime.timedelta(hours=24))
-                    return{'message': f'Logged in as {current_user[1]}',
+                                    current_user['password']):
+                    user_identifier = dict(email=email,
+                                           role=current_user['role'])
+                    access_token = create_access_token(identity=user_identifier,
+                                                       expires_delta=datetime.timedelta(hours=2))
+                    return{'message': f'Logged in as {current_user["email"]}',
                            'access_token': access_token,
                            }, 200
                 return {'message': 'Invalid password'}, 400

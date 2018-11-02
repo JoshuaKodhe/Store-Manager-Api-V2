@@ -68,6 +68,11 @@ class BaseTest(unittest.TestCase):
                                          "price": 200,
                                          "quantity": 15,
                                          "description": "great quality"})
+        self.poper_product_2 = json.dumps({"name": "Table",
+                                           "category": "furniture",
+                                           "price": 200,
+                                           "quantity": 15,
+                                           "description": "great quality"})
 
         self.no_product_name = json.dumps({"name": " ",
                                            "category": "furniture",
@@ -88,6 +93,13 @@ class BaseTest(unittest.TestCase):
                                             "quantity": 15,
                                             "description": "great quality"})
 
+        self.change_name = json.dumps({"name": "Table",
+                                       "category": "furniture",
+                                       "price": 200,
+                                       "quantity": 15,
+                                       "description": "great quality"})
+
+
     def register(self):
         response = self.client.post(base_url+"/auth/register",
                                     data=self.proper_reg,
@@ -101,8 +113,21 @@ class BaseTest(unittest.TestCase):
                                     data=self.user_login,
                                     content_type='application/json')
         access_token = json.loads(response.get_data())["access_token"]
-        print(json.loads(response.get_data()))
         return access_token
+
+    def post_product(self):
+        response = self.client.post(base_url+"/products",
+                                    data=self.poper_product,
+                                    headers=dict(Authorization="Bearer "+self.login()),
+                                    content_type='application/json')
+        return response
+
+    def post_another_product(self):
+        response = self.client.post(base_url+"/products",
+                                    data=self.poper_product_2,
+                                    headers=dict(Authorization="Bearer "+self.login()),
+                                    content_type='application/json')
+        return response
 
     def tearDown(self):
         '''Method to clear all tables

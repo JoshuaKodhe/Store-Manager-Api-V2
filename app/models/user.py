@@ -3,7 +3,7 @@ from datetime import datetime
 from passlib.hash import pbkdf2_sha256 as sha256
 
 
-from app.utils.db_connection import init_db
+from app.utils.db_connection import connect
 
 
 class User:
@@ -15,45 +15,46 @@ class User:
         self.password = password
         self.role = role
         self.registered_on = datetime.now()
-        self.db = init_db()
 
     def save_user(self):
         """ save a new user """
-        user = dict(email=self.email,
-                    username=self.username,
-                    password=self.password,
-                    role=self.role,
-                    registered_on=self.registered_on)
+        with connect() as connection:
+            with connection.cursor() as cursor:
+                cursor.execute("INSERT INTO users (email,username,\
+                                                   password,role,\
+                                                   registered_on)\
+                                VALUES(%s,%s,%s,%s,%s) \
+                                RETURNING username", (self.email,
+                                                      self.username,
+                                                      self.password,
+                                                      self.role,
+                                                      self.registered_on))
+                user = cursor.fetchone()
+                return dict(username=user)
 
-        cursor = self.db.cursor()
-
-        cursor.execute(
-            "INSERT INTO users (email,username,password,role,registered_on) \
-               VALUES(%s,%s,%s,%s,%s)",
-            (self.email, self.username, self.password, self.role, self.registered_on),)
-
-        self.db.commit()
-        self.db.close()
-        return user
-
-    def fetch_single_user(self, email):
+    @classmethod
+    def fetch_single_user(cls, email):
         """Return a single user by email"""
-        cursor = init_db().cursor()
-        cursor.execute("SELECT * FROM users WHERE email = %s;", (email,))
-        user = cursor.fetchone()
-        cursor.close()
-        return user
-
-    
+        with connect() as connection:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM users WHERE email = %s;",
+                               (email,))
+                user = cursor.fetchone()
+                print(user)
+                return dict(email=user[1], username=user[2],
+                            password=user[3], role=user[4])
 
     @staticmethod
     def check_if_user_exists(email):
-        cursor = init_db().cursor()
-        cursor.execute("SELECT * FROM users WHERE email = %s;", (email,))
-        result = cursor.fetchone()
-        if result:
-            return True
-        return False
+        """Method to check if the user is in the system"""
+        with connect() as connection:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM users WHERE email = %s;",
+                               (email,))
+                result = cursor.fetchone()
+                if result:
+                    return True
+                return False
 
     @staticmethod
     def generate_hash(password):

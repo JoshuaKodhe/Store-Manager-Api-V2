@@ -20,7 +20,7 @@ class DB:
                   password varchar(120) NOT NULL,
                   role varchar(40) NOT NULL,
                   registered_on varchar(100) NOT NULL
-                  )
+                  );
                   """,
 
                   """
@@ -31,7 +31,16 @@ class DB:
                   price float(45) NOT NULL,
                   quantity int NOT NULL,
                   description varchar(255) NOT NULL
-                  )
+                  );
+                  """,
+                  """
+                  CREATE TABLE IF NOT EXISTS sales(
+                  sale_id serial PRIMARY KEY,
+                  sale_attendant varchar(100) NOT NULL,
+                  product_name varchar(100) NOT NULL,
+                  quantity int NOT NULL,
+                  total float NOT NULL
+                  );
                   """
                   )
 

@@ -1,6 +1,6 @@
 language: python
 python:
- - "3.6"  
+ - "3.6"
 cache: pip
 install:
  - pip install -r requirements.txt
@@ -9,6 +9,7 @@ install:
 services:
   - postgresql
 before_script:
+  - export APP_SETTINGS=testing
   - psql -c "CREATE USER store_owner WITH PASSWORD '12345';"
   - psql -c 'CREATE DATABASE test_store_manager owner store_owner;'
   - psql -c 'CREATE DATABASE store_manager owner store_owner;'

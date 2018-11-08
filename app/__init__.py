@@ -5,15 +5,13 @@ from flask_jwt_extended import JWTManager
 
 from instance.config import APP_CONFIG
 from app.models.db_setup import DB
-
 from app.resources.products_endpoints import (ProductEndpoint,
                                               ProductsEndpoint)
-
 from app.resources.sales_endpoints import (SalesRecordsEnpoint,
                                            SalesRecordEnpoint)
-
 from app.resources.auth_endpoints import (UserRegistrationEndpoint,
                                           UserLogin, UserLogout)
+from app.resources.auth_endpoints import blacklist
 
 jwt = JWTManager()
 
@@ -38,6 +36,12 @@ def create_app(config_name):
     @jwt.user_identity_loader
     def user_identity_lookup(user_identifier):
         return {'email': user_identifier["email"]}
+
+    # jwt token revoking
+    @jwt.token_in_blacklist_loader
+    def check_if_token_in_blacklist(decrypted_token):
+        jti = decrypted_token['jti']
+        return jti in blacklist
 
     # registering routes
     version_2 = Blueprint('api2', __name__, url_prefix="/api/v2")

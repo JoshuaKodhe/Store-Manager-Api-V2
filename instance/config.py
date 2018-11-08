@@ -10,6 +10,8 @@ class Config(object):
     DEBUG = False
     CSRF_ENABLED = True
     SECRET_KEY = os.getenv('SECRET_KEY')
+    JWT_BLACKLIST_ENABLED = True
+    JWT_BLACKLIST_TOKEN_CHECKS = 'access'
     DATABASE_URL = os.getenv("DATABASE_URL")
 
 

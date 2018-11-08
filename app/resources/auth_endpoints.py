@@ -9,6 +9,8 @@ from app.models.user import User
 from app.validators.input_validators import InputValidator
 from app.utils.schema import register_schema, login_schema
 
+blacklist = set()
+
 
 class UserRegistrationEndpoint(Resource):
     """Endpoint for user to register"""
@@ -81,7 +83,6 @@ class UserLogin(Resource):
 class UserLogout(Resource):
     @jwt_required
     def delete(self):
-        blacklist = set()
         jti = get_raw_jwt()['jti']
         blacklist.add(jti)
         return {"message": "Successfully logged out"}, 200

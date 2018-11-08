@@ -1,5 +1,8 @@
 # Store-Manager-Api-V2
 
+[![Build Status](https://travis-ci.org/JoshuaKodhe/Store-Manager-Api-V2.svg?branch=ft-products-sales-161499526)](https://travis-ci.org/JoshuaKodhe/Store-Manager-Api-V2)
+[![Maintainability](https://api.codeclimate.com/v1/badges/1244b02159ef166cb31d/maintainability)](https://codeclimate.com/github/JoshuaKodhe/Store-Manager-Api-V2/maintainability)
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/06667185f01946854464)
 
 ## Introduction
 
@@ -12,6 +15,60 @@ Store Manager is a web application that helps store owners manage sales and prod
 3. Admin/store attendant can get a specific product
 4. Store attendant can add a sale order
 5. Admin can get all sale records
+
+
+### Prerequisites
+
+[virtualenv](https://realpython.com/python-virtual-environments-a-primer/#using-virtual-environments)
+[Git](https://git-scm.com/)
+
+### Installing
+
+### Change into the directory you'd prefer the project to live
+
+```
+$ cd <name of a certain folder on your local>
+```
+
+### Clone the project and change into the directory
+
+```
+$ git clone [Store-Manager-Api](https://github.com/JoshuaKodhe/Store-Manager-API/tree/ch-deploy-to-heroku-161363243)
+```
+
+```
+$ cd Store-Manager-Api
+```
+
+### Create and activate virtual Environment
+
+```
+$ python3 -m venv env
+
+```
+```
+$ source env/bin/activate
+```
+
+### Install project dependencies in your environment
+
+```
+$ pip install -r requirements.txt
+```
+
+### Export environment variables
+
+```
+export FLASK_APP="run.py"
+export APP_SETTINGS="development"
+export SECRET_KEY=<your secret key>
+
+```
+
+### Run the application
+```
+$ python run.py
+```
 
 
 ### API-Endpoints

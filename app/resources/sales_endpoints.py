@@ -17,7 +17,6 @@ class SalesRecordEnpoint(Resource):
         data = request.get_json()
 
         sale_attendant = get_jwt_identity()['email']
-
         name = InputValidator.valid_string(data['name'].strip())
         quantity_to_sell = InputValidator.valid_number(data['quantity'])
         payload = ['name', 'quantity']
@@ -28,8 +27,7 @@ class SalesRecordEnpoint(Resource):
 
         if Product.retrieve_product_by_name(name):
             product_on_sale = Product.retrieve_product_by_name(name)
-            print(product_on_sale)
-            if quantity_to_sell < product_on_sale["quantity"]:
+            if quantity_to_sell <= product_on_sale["quantity"]:
                 total = product_on_sale["price"] * quantity_to_sell
                 new_sale_record = Sales(quantity_to_sell,
                                         name, sale_attendant, total)
@@ -44,24 +42,37 @@ class SalesRecordEnpoint(Resource):
                                        )
                 new_quantity = product_on_sale["quantity"]-quantity_to_sell
                 return {"sale record": added_sale_record,
-                        "message": f"The quantity of {product_on_sale['name']} has been updated new quantity is {new_quantity}"}, 201
+                        "message": f"The quantity of {product_on_sale['name']} has been updated new quantity is {new_quantity}"}, 200
             return {"message": f"The quantity you entered exceeds stoked quantity"}, 400
         return {"message": f"product {name} does not exist"}, 404
 
+    @jwt_required
     def get(self, sale_id):
-        """Retrieve a single product"""
+        """Retrieve a single sales"""
+        user = get_jwt_identity()['email']
+        role = get_jwt_claims()['role']
         sales = Sales.retrieve_sales_by_id(sale_id)
-        print(sales)
-        if sales:
-            return {"product": sales,
-                    "message": "Retrieved successfully"}, 200
-        return {"message": f"Sale of ID {sale_id} does not exist"}, 404
+
+        if (role == "admin") or (user == sales['sale_attendant']):
+            if sales:
+                return {"sale_records": sales,
+                        "message": "Retrieved successfully"}, 200
+            return {"message": f"Sale of ID {sale_id} does not exist"}, 404
+        return {"message": "You do not have authorization to access the sale record"}, 401
 
 
 class SalesRecordsEnpoint(Resource):
     @jwt_required
     def get(self):
-        sales_records = Sales.retrieve_sales()
-        if sales_records:
-            return {"products": sales_records,
-                    "message": "retrieved successfully"}, 200
+        role = get_jwt_claims()['role']
+        if role == "admin":
+            sales_records = Sales.retrieve_sales()
+            if sales_records:
+                return {"sales_records": sales_records,
+                        "message": "retrieved successfully"}, 200
+        else:
+            user = get_jwt_identity()['email']
+            sales_records = Sales.retrieve_sales_by_attendant(user)
+            if sales_records:
+                return {"sales_records": sales_records,
+                        "message": "retrieved successfully"}, 200

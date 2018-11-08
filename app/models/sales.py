@@ -21,7 +21,6 @@ class Sales:
                     (self.quantity, self.name, self.sale_attendant,
                      self.total),)
                 product = cursor.fetchone()
-                print(product)
                 return dict(name=product[1], quantity=product[2],
                             sale_attendant=product[3], sale_total=product[4])
 
@@ -35,7 +34,6 @@ class Sales:
                     return dict(sales="No sales live here currently")
 
             sales_list = []
-            print(sales)
             for sale in sales:
                 sales_list.append(dict(sale_attendant=sale[1],
                                        product=sale[2],
@@ -50,8 +48,25 @@ class Sales:
                 cursor.execute("""SELECT * FROM sales WHERE sale_id=%s""",
                                (sale_id,))
                 sale = cursor.fetchone()
-                print(sale)
             if sale:
                 return dict(sale_id=sale[0], sale_attendant=sale[1],
                             product=sale[2],
                             quantity=sale[3], price=sale[4])
+
+    @classmethod
+    def retrieve_sales_by_attendant(cls, sale_attendant):
+        """Method to fetch a single product by it's ID"""
+        with connect() as connection:
+            with connection.cursor() as cursor:
+                cursor.execute("""SELECT * FROM sales WHERE sale_attendant=%s""",
+                               (sale_attendant,))
+                sales = cursor.fetchall()
+                if not sales:
+                    return dict(sales="No sales live here currently")
+
+            sales_list = []
+            for sale in sales:
+                sales_list.append(dict(sale_id=sale[0], sale_attendant=sale[1],
+                                       product=sale[2], quantity=sale[3],
+                                       price=sale[4]))
+            return sales_list

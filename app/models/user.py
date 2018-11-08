@@ -40,7 +40,6 @@ class User:
                 cursor.execute("SELECT * FROM users WHERE email = %s;",
                                (email,))
                 user = cursor.fetchone()
-                print(user)
                 return dict(email=user[1], username=user[2],
                             password=user[3], role=user[4])
 

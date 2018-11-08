@@ -64,7 +64,6 @@ class UserLogin(Resource):
         if email and password:
             if User.check_if_user_exists(email):
                 current_user = User.fetch_single_user(email)
-                print(current_user)
                 if User.verify_hash(password,
                                     current_user['password']):
                     user_identifier = dict(email=email,

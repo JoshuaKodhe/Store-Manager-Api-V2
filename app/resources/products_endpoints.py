@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from flask import request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_claims
 from flask_expects_json import expects_json
 
 from app.models.products_model import Product
@@ -12,6 +12,10 @@ class ProductEndpoint(Resource):
     @jwt_required
     @expects_json(product_schema)
     def post(self):
+        role = get_jwt_claims()['role']
+        if role != "admin":
+            return {"message": "You do not have authorization to access this feature"}
+
         data = request.get_json()
 
         name = InputValidator.valid_string(data['name'].strip())
@@ -40,7 +44,6 @@ class ProductEndpoint(Resource):
     def get(self, prod_id):
         """Retrieve a single product"""
         product = Product.retrieve_product_by_id(prod_id)
-        print(product)
         if product:
             return {"product": product,
                     "message": "Retrieved successfully"}, 200
@@ -48,11 +51,14 @@ class ProductEndpoint(Resource):
 
     @jwt_required
     def put(self, prod_id):
+        role = get_jwt_claims()['role']
+        if role != "admin":
+            return {"message": "You do not have authorization to access this feature"}, 401
+
         single_product = Product.retrieve_product_by_id(prod_id)
         if not single_product:
             return {"message": f"Product of ID {prod_id} does not exist"}, 404
         data = request.get_json()
-        print(data)
 
         name = single_product['name']
         if 'name' in data:
@@ -81,7 +87,12 @@ class ProductEndpoint(Resource):
         return {"product": single_product,
                 "message": "product updated"}, 200
 
+    @jwt_required
     def delete(self, prod_id):
+        role = get_jwt_claims()['role']
+        if role != "admin":
+            return {"message": "You do not have authorization to access this feature"}, 401
+
         product = Product.retrieve_product_by_id(prod_id)
         if not product:
             return {"message": f"Product of ID {prod_id} does not exist"}, 404
@@ -91,6 +102,7 @@ class ProductEndpoint(Resource):
 
 
 class ProductsEndpoint(Resource):
+    @jwt_required
     def get(self):
         products = Product.retrieve_products(self)
         if products:

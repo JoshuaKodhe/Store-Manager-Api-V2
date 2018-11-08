@@ -2,6 +2,7 @@
 import psycopg2
 
 from instance.config import APP_CONFIG
+from app.models.user import User
 
 
 class DB:
@@ -48,6 +49,13 @@ class DB:
             self.cursor.execute(table)
 
         self.conn.commit()
+
+    def create_admin(self):
+        if not User.check_if_user_exists("jkodhe32@gmail.com"):
+            return User(username="KodheJoshua",
+                        email="jkodhe32@gmail.com",
+                        password=User.generate_hash("joshua123"),
+                        role="admin").save_user()
 
     def destroy_tables(self):
         """Used to remove tables from database"""

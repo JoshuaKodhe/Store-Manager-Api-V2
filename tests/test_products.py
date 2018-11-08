@@ -115,7 +115,6 @@ class TestProducts(BaseTest):
                                    headers=dict(Authorization="Bearer "+self.login()),
                                    content_type='application/json')
         data = json.loads(response.data.decode())
-        print(data)
         self.assertEqual(data['message'],
                          "Product of ID 4 does not exist")
         self.assertEqual(response.status_code, 404)
@@ -129,7 +128,6 @@ class TestProducts(BaseTest):
                                    headers=dict(Authorization="Bearer "+self.login()),
                                    content_type='application/json')
         data = json.loads(response.data.decode())
-        print(data)
         self.assertEqual(data['message'],
                          "product name already exists")
         self.assertEqual(response.status_code, 400)
@@ -142,7 +140,6 @@ class TestProducts(BaseTest):
                                    headers=dict(Authorization="Bearer "+self.login()),
                                    content_type='application/json')
         data = json.loads(response.data.decode())
-        print(data)
         self.assertEqual(data['message'],
                          "product updated")
         self.assertEqual(response.status_code, 200)

@@ -26,13 +26,14 @@ def create_app(config_name):
     # db initialization
     db = DB(config_name)
     db.create_tables()
+    db.create_admin()
 
     # jwt claims for role
     jwt.init_app(app)
 
     @jwt.user_claims_loader
     def add_claims_to_access_token(user_identifier):
-        return {'roles': user_identifier["role"]}
+        return {'role': user_identifier["role"]}
 
     @jwt.user_identity_loader
     def user_identity_lookup(user_identifier):
@@ -50,10 +51,13 @@ def create_app(config_name):
     api.add_resource(UserLogin, '/auth/login')
     api.add_resource(UserLogout, '/auth/logout')
 
-    @app.errorhandler(Exception)
-    def unhandled_exception(e):
-        return jsonify({"message": "This is embarrasing. Please contact the admin",
-                        "status": 500})
-
     app.register_blueprint(version_2)
+
+    # error handling
+    # @app.errorhandler(Exception)
+    # def unhandled_exception(e):
+    #     return jsonify({"message": "we couldnt find that resource.\
+    #                                 Please contact the admin"
+    #                     }), 404
+
     return app

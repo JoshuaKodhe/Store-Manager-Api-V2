@@ -3,10 +3,9 @@ from .base_test import BaseTest, base_url
 
 
 class TestSale(BaseTest):
-    def test_get_products(self):
+    def test_get_sales(self):
         '''Tests for a successful product Addition'''
         response = self.client.get(base_url+"/sales",
-                                   data=self.poper_product,
                                    headers=dict(Authorization="Bearer "+self.login()),
                                    content_type='application/json')
 
@@ -14,9 +13,9 @@ class TestSale(BaseTest):
         self.assertEqual(data["message"], "retrieved successfully")
         self.assertEqual(response.status_code, 200)
 
-    def test_get_product(self):
+    def test_get_sale(self):
         '''Tests for a successful product Addition'''
-        
+
         response = self.client.get(base_url+"/sales",
                                    data=self.poper_product,
                                    headers=dict(Authorization="Bearer "+self.login()),

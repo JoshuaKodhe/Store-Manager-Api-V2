@@ -39,8 +39,9 @@ class Product:
             product_list = []
 
             for product in products:
-                product_list.append(dict(name=product[1], category=product[2],
-                                         price=product[3], quantity=product[4],
+                product_list.append(dict(id=product[0], name=product[1],
+                                         category=product[2], price=product[3],
+                                         quantity=product[4],
                                          description=product[5]))
             return product_list
 
@@ -66,7 +67,6 @@ class Product:
                 cursor.execute("""SELECT * FROM products WHERE name = %s""",
                                (name,))
                 product = cursor.fetchone()
-                print(product)
                 if product:
                     return dict(prod_id=product[0], name=product[1],
                                 category=product[2], price=product[3],

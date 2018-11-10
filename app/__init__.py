@@ -12,6 +12,7 @@ from app.resources.sales_endpoints import (SalesRecordsEnpoint,
 from app.resources.auth_endpoints import (UserRegistrationEndpoint,
                                           UserLogin, UserLogout)
 from app.resources.auth_endpoints import blacklist
+from flask_cors import CORS
 
 jwt = JWTManager()
 
@@ -25,6 +26,9 @@ def create_app(config_name):
     db = DB(config_name)
     db.create_tables()
     db.create_admin()
+
+    # cors setup
+    CORS(app)
 
     # jwt claims for role
     jwt.init_app(app)
@@ -57,11 +61,11 @@ def create_app(config_name):
 
     app.register_blueprint(version_2)
 
-    # error handling
-    # @app.errorhandler(Exception)
-    # def unhandled_exception(e):
-    #     return jsonify({"message": "we couldnt find that resource.\
-    #                                 Please contact the admin"
-    #                     }), 404
+    #error handling
+    @app.errorhandler(Exception)
+    def unhandled_exception(e):
+        return jsonify({"message": "we couldnt find that resource.\
+                                    Please contact the admin"
+                        }), 404
 
     return app

@@ -60,7 +60,8 @@ class DB:
     def destroy_tables(self):
         """Used to remove tables from database"""
         sql = [" DROP TABLE IF EXISTS products",
-               " DROP TABLE IF EXISTS users CASCADE"
+               " DROP TABLE IF EXISTS users CASCADE",
+			   " DROP TABLE IF EXISTS sales CASCADE",
                ]
         for string in sql:
             self.cursor.execute(string)

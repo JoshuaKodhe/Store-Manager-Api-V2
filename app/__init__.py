@@ -62,8 +62,8 @@ def create_app(config_name):
 	app.register_blueprint(version_2)
 
 	#error handling
-	# @app.errorhandler(Exception)
-	# def unhandled_exception(e):
-	# 	return jsonify({"message": "we couldnt find that resource.Please contact the admin"}), 404
+	@app.errorhandler(Exception)
+	def unhandled_exception(e):
+		return jsonify({"message": "we couldnt find that resource.Please contact the admin"}), 404
 
 	return app

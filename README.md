@@ -1,6 +1,7 @@
 # Store-Manager-Api-V2
 
 [![Build Status](https://travis-ci.org/JoshuaKodhe/Store-Manager-Api-V2.svg?branch=ft-products-sales-161499526)](https://travis-ci.org/JoshuaKodhe/Store-Manager-Api-V2)
+[![Coverage Status](https://coveralls.io/repos/github/JoshuaKodhe/Store-Manager-Api-V2/badge.svg?branch=ch-role-based-authentication-161932691)](https://coveralls.io/github/JoshuaKodhe/Store-Manager-Api-V2?branch=ch-role-based-authentication-161932691)
 [![Maintainability](https://api.codeclimate.com/v1/badges/1244b02159ef166cb31d/maintainability)](https://codeclimate.com/github/JoshuaKodhe/Store-Manager-Api-V2/maintainability)
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/06667185f01946854464)
 
@@ -15,7 +16,6 @@ Store Manager is a web application that helps store owners manage sales and prod
 3. Admin/store attendant can get a specific product
 4. Store attendant can add a sale order
 5. Admin can get all sale records
-
 
 ### Prerequisites
 
@@ -46,6 +46,7 @@ $ cd Store-Manager-Api
 $ python3 -m venv env
 
 ```
+
 ```
 $ source env/bin/activate
 ```
@@ -66,21 +67,22 @@ export SECRET_KEY=<your secret key>
 ```
 
 ### Run the application
+
 ```
 $ python run.py
 ```
 
-
 ### API-Endpoints
-``` Prefix - /api/v2```
 
- Endpoint | Functionality
- ---|---
-GET /products | Fetch all products
-GET /products/<productId> | Fetch a single product record
-GET /sales| /questions | Fetch all sale records
-GET /sales/<saleId> | Fetch a single sale record
-POST /products | Create a product
-POST /sales | Create a sale order
-POST /auth/register| Create a user
-POST /auth/login | Login a user
+`Prefix - /api/v2`
+
+| Endpoint                  | Functionality                 |
+| ------------------------- | ----------------------------- |
+| GET /products             | Fetch all products            |
+| GET /products/<productId> | Fetch a single product record |
+| GET /sales                | /questions                    | Fetch all sale records |
+| GET /sales/<saleId>       | Fetch a single sale record    |
+| POST /products            | Create a product              |
+| POST /sales               | Create a sale order           |
+| POST /auth/register       | Create a user                 |
+| POST /auth/login          | Login a user                  |

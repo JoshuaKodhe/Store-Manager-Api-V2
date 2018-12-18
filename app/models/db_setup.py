@@ -7,6 +7,7 @@ from app.models.user import User
 
 class DB:
     """class that will be used for db operations"""
+
     def __init__(self, config_name):
         self.conn = psycopg2.connect(APP_CONFIG[config_name].DATABASE_URL)
         self.cursor = self.conn.cursor()
@@ -43,6 +44,8 @@ class DB:
                   total float NOT NULL
                   );
                   """
+                  """CREATE EXTENSION IF NOT EXISTS citext;"""
+                  """ALTER TABLE products ALTER COLUMN name TYPE citext;"""
                   )
 
         for table in tables:
@@ -61,7 +64,7 @@ class DB:
         """Used to remove tables from database"""
         sql = [" DROP TABLE IF EXISTS products",
                " DROP TABLE IF EXISTS users CASCADE",
-			   " DROP TABLE IF EXISTS sales CASCADE",
+               " DROP TABLE IF EXISTS sales CASCADE",
                ]
         for string in sql:
             self.cursor.execute(string)

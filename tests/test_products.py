@@ -37,7 +37,7 @@ class TestProducts(BaseTest):
                                     content_type='application/json')
         data = json.loads(response.data.decode())
         self.assertEqual(data['message'],
-                         "Ensure all the fields are correctly entered")
+                         "Field name should contain letters")
         self.assertEqual(response.status_code, 400)
 
     def test_post_product_empty_price(self):
@@ -49,7 +49,7 @@ class TestProducts(BaseTest):
                                     content_type='application/json')
         data = json.loads(response.data.decode())
         self.assertEqual(data['message'],
-                         "Ensure all the fields are correctly entered")
+                         "Field name should contain letters")
         self.assertEqual(response.status_code, 400)
 
     def test_post_product_extra_field(self):

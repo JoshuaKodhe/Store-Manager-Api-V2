@@ -32,13 +32,22 @@ class ProductEndpoint(Resource):
 
         if Product.retrieve_product_by_name(name):
             return{"message": f"Product {name} exists"}, 400
-
-        if (name) and description and category and(quantity)and(unit_price):
-            new_product = Product(name, category, unit_price, quantity,
-                                  description).save()
-            return {"product": new_product,
-                    "message": "Successfully added"}, 201
-        return {"message": "Ensure all the fields are correctly entered"}, 400
+        else:
+            if not name:
+                return {"message": "Field name should contain letters"}, 400
+            elif not description:
+                return {"message": "Field description should contain letters"}, 400
+            elif not category:
+                return {"message": "Field category should contain letters"}, 400
+            elif not quantity:
+                return {"message": "Field should contain numbers"}, 400
+            elif not unit_price:
+                return {"message": "Field unit_price should contain number"}, 400
+            else:
+                new_product = Product(name, category, unit_price, quantity,
+                                      description).save()
+                return {"product": new_product,
+                        "message": "Successfully added"}, 201
 
     @jwt_required
     def get(self, prod_id):
@@ -63,21 +72,36 @@ class ProductEndpoint(Resource):
         data = request.get_json()
 
         name = single_product['name']
-        if 'name' in data:
-            name = data['name']
-
         description = single_product['description']
-        if 'description' in data:
-            description = data['description']
         category = single_product['category']
-        if 'category' in data:
-            category = data['category']
         price = single_product['price']
-        if 'price' in data:
-            price = data['price']
         quantity = single_product['quantity']
+
+        if 'name' in data:
+            name = InputValidator.valid_string(data['name'].strip())
+            if not name:
+                return {"message": "Field name should contain letters"}, 400
+
+        if 'description' in data:
+            description = InputValidator.valid_string(
+                data['description'].strip())
+            if not description:
+                return {"message": "Field description should contain letters"}, 400
+
+        if 'category' in data:
+            category = InputValidator.valid_string(data['category'].strip())
+            if not category:
+                return {"message": "Field category should contain letters"}, 400
+
+        if 'price' in data:
+            price = InputValidator.valid_number((data['price']))
+            if not price:
+                return {"message": "Field price should contain number"}, 400
+
         if 'quantity' in data:
-            quantity = data['quantity']
+            quantity = InputValidator.valid_number((data['price']))
+            if not quantity:
+                return {"message": "Field should contain numbers"}, 400
 
         single_product = Product.update_product(name, category, price,
                                                 quantity, description, prod_id)

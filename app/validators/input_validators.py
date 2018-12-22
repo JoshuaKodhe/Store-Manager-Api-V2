@@ -1,5 +1,7 @@
 
 import re
+import validators
+
 
 class InputValidator:
     @staticmethod
@@ -19,5 +21,11 @@ class InputValidator:
     def valid_email(user_input):
         is_valid = re.search(r'^\w+@\w+.\w+$', user_input)
         if is_valid:
+            return user_input
+        return False
+
+    @staticmethod
+    def valid_image(user_input):
+        if validators.url(user_input):
             return user_input
         return False

@@ -23,8 +23,10 @@ class ProductEndpoint(Resource):
         category = InputValidator.valid_string(data['category'].strip())
         quantity = InputValidator.valid_number(data['quantity'])
         unit_price = InputValidator.valid_number((data['price']))
+        image_url = InputValidator.valid_image(data['image_url'].strip())
 
-        payload = ['name', 'description', 'category', 'quantity', 'price']
+        payload = ['name', 'description', 'category',
+                   'quantity', 'price', 'image_url']
 
         for item in data.keys():
             if item not in payload:
@@ -43,9 +45,11 @@ class ProductEndpoint(Resource):
                 return {"message": "Field should contain numbers"}, 400
             elif not unit_price:
                 return {"message": "Field unit_price should contain number"}, 400
+            elif not image_url:
+                return {"message": "Field image_url should contain url"}, 400
             else:
                 new_product = Product(name, category, unit_price, quantity,
-                                      description).save()
+                                      description, image_url).save()
                 return {"product": new_product,
                         "message": "Successfully added"}, 201
 
@@ -76,6 +80,7 @@ class ProductEndpoint(Resource):
         category = single_product['category']
         price = single_product['price']
         quantity = single_product['quantity']
+        image_url = single_product['image_url']
 
         if 'name' in data:
             name = InputValidator.valid_string(data['name'].strip())
@@ -101,10 +106,16 @@ class ProductEndpoint(Resource):
         if 'quantity' in data:
             quantity = InputValidator.valid_number((data['price']))
             if not quantity:
-                return {"message": "Field should contain numbers"}, 400
+                return {"message": "Field quantity should contain numbers"}, 400
+
+        if 'image_url' in data:
+            image_url = InputValidator.valid_image(
+                data['image_url'].strip())
+            if not image_url:
+                return {"message": "Field image_url should contain url"}, 400
 
         single_product = Product.update_product(name, category, price,
-                                                quantity, description, prod_id)
+                                                quantity, description, image_url, prod_id)
         return {"product": single_product,
                 "message": "product updated"}, 200
 

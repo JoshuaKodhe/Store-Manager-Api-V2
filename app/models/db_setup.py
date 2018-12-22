@@ -32,7 +32,8 @@ class DB:
                   category varchar(50) NOT NULL,
                   price float(45) NOT NULL,
                   quantity int NOT NULL,
-                  description varchar(255) NOT NULL
+                  description varchar(255) NOT NULL,
+				  image_url varchar(255) NOT NULL
                   );
                   """,
                   """
